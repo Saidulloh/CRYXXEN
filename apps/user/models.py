@@ -33,6 +33,9 @@ class User(AbstractUser):
     last_activity = models.DateTimeField(
         auto_now=True
     )
+    is_online = models.BooleanField(
+        default=False
+    )
 
     def __str__(self):
         return f'{self.username}'

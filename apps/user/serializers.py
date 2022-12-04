@@ -3,17 +3,18 @@ from rest_framework import serializers
 from apps.user.models import User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializerCreate(serializers.ModelSerializer):
     class Meta:
         model = User
-        read_only_field = (
+        read_only_fields = (
             'id',
             'money',
-            'last_activity',
             'created',
+            'is_online',
         )
         fields = (
             'username',
+            'last_activity',
             'email',
             'phone_number',
             'birth_date',
@@ -30,6 +31,22 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserSerializerList(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'phone_number',
+            'birth_date',
+            'avatarka',
+            'about',
+            'created',
+            'last_activity',
+            'is_online',
+        )
+
+
 class UserSerializerDetail(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -44,4 +61,5 @@ class UserSerializerDetail(serializers.ModelSerializer):
             'about',
             'created',
             'last_activity',
+            'is_online'
         )

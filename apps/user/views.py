@@ -1,18 +1,18 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework import status
 from rest_framework.response import Response
 
 from apps.user.models import User
-from apps.user.serializers import UserSerializerDetail, UserSerializer
+from apps.user.serializers import UserSerializerDetail, UserSerializerCreate, UserSerializerList    
 
 
 class UserUpdateDestroyAPIView(GenericViewSet,
                             UpdateModelMixin,
                             DestroyModelMixin):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserSerializerCreate
 
     def check(self,request, *args, **kwargs):
         try:
@@ -22,7 +22,7 @@ class UserUpdateDestroyAPIView(GenericViewSet,
                 return Response(data=UserSerializerDetail(user).data)
             return Response({'Error':'You don\'t have pretty permissions!'})
         except User.DoesNotExist:
-            return Response({'Error':'Can\'t find user'}, status=HTTP_400_BAD_REQUEST)
+            return Response({'Error':'Can\'t find user'}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, *args, **kwargs):
         return self.check(request, *args, **kwargs)
@@ -39,12 +39,22 @@ class UserAPIViewSet(GenericViewSet,
                     ListModelMixin,
                     RetrieveModelMixin):
     queryset = User.objects.all()
-    serializer_class = UserSerializerDetail
+    serializer_class = UserSerializerList
 
-    def get(self, request, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         try:
-            queryset = User.objects.get(id=request.user.id)
-            serializer = UserSerializerDetail(queryset)
-            return Response(data=serializer.data)
-        except User.DoesNotExist:   
-            return Response({'Error': 'Can\'t find user'}, status=HTTP_400_BAD_REQUEST)
+            instance = User.objects.get(id = kwargs.get('pk'))
+            if instance == request.user:
+                serializer = UserSerializerDetail(instance)
+                return Response(serializer.data)
+            return Response(UserSerializerList(instance=instance).data)
+        except User.DoesNotExist:
+            return Response({'Error': 'Can\'t find user'})
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return UserSerializerCreate
+        elif self.action == 'list':
+            return UserSerializerList
+        elif self.action == 'update':
+            return UserSerializerDetail

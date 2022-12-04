@@ -5,7 +5,6 @@ def my_callback(sender, **kwargs):
     print("Setting changed!")
 
 class MyAppConfig(AppConfig):
-    ...
 
     def ready(self):
         setting_changed.connect(my_callback)
