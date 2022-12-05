@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.response import Response
 
-from apps.user.models import User
-from apps.user.serializers import UserSerializerDetail, UserSerializerCreate, UserSerializerList    
+from apps.user.models import User, Wallet
+from apps.user.serializers import UserSerializerDetail, UserSerializerCreate, UserSerializerList, ReplenishmentWalletSerializer   
 
 
 class UserUpdateDestroyAPIView(GenericViewSet,
@@ -58,3 +58,19 @@ class UserAPIViewSet(GenericViewSet,
             return UserSerializerList
         elif self.action == 'update':
             return UserSerializerDetail
+
+
+class ReplenishmentWalletAPIViewSet(GenericViewSet,
+                                    CreateModelMixin):
+    queryset = Wallet.objects.all()
+    serializer_class = ReplenishmentWalletSerializer
+
+    def perform_create(self, serializer):
+        return serializer.save(owner = self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        user = User.objects.get(id = request.user.id)
+        amount = int(request.data['amount'])
+        user.money += amount
+        user.save()
+        return super().create(request, *args, **kwargs)

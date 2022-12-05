@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.user.models import User
+from apps.user.models import User, Wallet
 
 
 class UserSerializerCreate(serializers.ModelSerializer):
@@ -62,4 +62,15 @@ class UserSerializerDetail(serializers.ModelSerializer):
             'created',
             'last_activity',
             'is_online'
+        )
+
+
+class ReplenishmentWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wallet
+        read_only_fileds = ('owner', )
+        fields = (
+            'id',
+            'amount',
+            'date',
         )

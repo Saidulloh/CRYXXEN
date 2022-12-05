@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from apps.user.views import UserAPIViewSet, UserUpdateDestroyAPIView
+from apps.user.views import UserAPIViewSet, UserUpdateDestroyAPIView, ReplenishmentWalletAPIViewSet
 
 
 router = DefaultRouter()
@@ -11,6 +11,10 @@ router.register(
 router.register(
     prefix="user-edit",
     viewset=UserUpdateDestroyAPIView
+)
+router.register(
+    prefix='replenishment',
+    viewset=ReplenishmentWalletAPIViewSet
 )
 
 urlpatterns = router.urls
