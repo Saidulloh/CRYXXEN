@@ -1,11 +1,13 @@
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.status import HTTP_202_ACCEPTED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 
-from apps.user.models import User, Wallet
-from apps.user.serializers import UserSerializerDetail, UserSerializerCreate, UserSerializerList, ReplenishmentWalletSerializer   
+from apps.user.models import User
+from apps.user.serializers import UserSerializerDetail, UserSerializerCreate, UserSerializerList, ResetUserPasswordSerializer   
 
 
 class UserUpdateDestroyAPIView(GenericViewSet,
@@ -60,17 +62,33 @@ class UserAPIViewSet(GenericViewSet,
             return UserSerializerDetail
 
 
-class ReplenishmentWalletAPIViewSet(GenericViewSet,
-                                    CreateModelMixin):
-    queryset = Wallet.objects.all()
-    serializer_class = ReplenishmentWalletSerializer
+class ResetUserPassword(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        return serializer.save(owner = self.request.user)
-    
-    def create(self, request, *args, **kwargs):
-        user = User.objects.get(id = request.user.id)
-        amount = int(request.data['amount'])
-        user.money += amount
-        user.save()
-        return super().create(request, *args, **kwargs)
+    def post(self, request):
+        try:
+            serializer = ResetUserPasswordSerializer(data=request.data)
+            if serializer.is_valid():
+                if request.data['new_password'] == request.data['confirm_new_password']:
+                    if request.data['new_password'].isalnum():
+                        user = User.objects.get(id=request.user.id)
+                        user.set_password(request.data['new_password'])
+                        user.save()
+                        return Response(data={"ok": "ok"}, status=HTTP_202_ACCEPTED)
+                else:
+                    return Response(data={"Error":"Password is not confirmed"}, status=HTTP_404_NOT_FOUND)
+        except Exception as ex:
+            return Response(data={"error": f"error is {ex}"}, status=HTTP_400_BAD_REQUEST)
+
+
+class GetUserInfo(ListAPIView):
+    queryset = User.objects.filter(id=False)
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserSerializerList
+
+    def get(self, request, *args, **kwargs):
+        queryset = User.objects.get(id=request.user.id)
+        if queryset:
+            serializer = UserSerializerDetail(queryset)
+            return Response(data=serializer.data)
+        return Response({'error': 'Bad request'}, status=HTTP_400_BAD_REQUEST)

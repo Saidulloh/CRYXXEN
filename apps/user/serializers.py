@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND
 
-from apps.user.models import User, Wallet
+from apps.user.models import User
 
 
 class UserSerializerCreate(serializers.ModelSerializer):
@@ -48,6 +50,10 @@ class UserSerializerList(serializers.ModelSerializer):
 
 
 class UserSerializerDetail(serializers.ModelSerializer):
+    wallet_owner = UserSerializerList(many=True, read_only=True)
+    user_favorite = UserSerializerList(many=True, read_only=True)
+    basket_owner = UserSerializerList(many=True, read_only=True)
+
     class Meta:
         model = User
         fields = (
@@ -57,20 +63,30 @@ class UserSerializerDetail(serializers.ModelSerializer):
             'phone_number',
             'birth_date',
             'avatarka',
-            'money',
+            'sale',
+            'amount',
             'about',
             'created',
             'last_activity',
-            'is_online'
+            'is_online',
+            'wallet_owner',
+            'user_favorite',
+            'basket_owner'
         )
 
 
-class ReplenishmentWalletSerializer(serializers.ModelSerializer):
+class ResetUserPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField()
+    confirm_new_password = serializers.CharField()
+
     class Meta:
-        model = Wallet
-        read_only_fileds = ('owner', )
-        fields = (
-            'id',
-            'amount',
-            'date',
-        )
+        fields = "__all__"
+
+    def create(self, validated_data):
+        try:
+            user =  User.objects.get(id=validated_data['id'])
+            user.set_password(validated_data['new_password'])
+            user.save()
+            return user
+        except User.DoesNotExist:
+            return Response(data={"Error": "User can\t found!"}, status=HTTP_404_NOT_FOUND)

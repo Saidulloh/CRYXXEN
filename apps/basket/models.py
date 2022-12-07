@@ -5,14 +5,11 @@ from apps.user.models import User
 
 
 class Basket(models.Model):
-    product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name='basket_product'
+    product = models.ManyToManyField(
+        Product
     )
-    owner = models.ForeignKey(
+    owner = models.ManyToManyField(
         User,
-        on_delete=models.CASCADE,
         related_name='basket_owner'
     )
     time_create = models.DateTimeField(

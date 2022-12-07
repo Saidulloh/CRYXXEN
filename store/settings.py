@@ -33,28 +33,33 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
-    # apps
+LOCAL_APPS = [
     'apps.basket',
     'apps.category',
     'apps.favorite',
     'apps.product',
     'apps.user',
+    'apps.wallet',
+]
 
-    # requirements
+REQUIREMENTS = [
     'rest_framework',
     'rest_framework_swagger',
     'django_filters',
     'rest_framework_simplejwt',
     'corsheaders',
 ]
+
+INSTALLED_APPS = DJANGO_APPS + REQUIREMENTS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -68,6 +73,7 @@ MIDDLEWARE = [
 
     # Custom MiddleWare
     'utils.LastActivityMiddleWare.LastActivity',
+    'utils.LastActivityMiddleWare.IsOnline',
 ]
 
 ROOT_URLCONF = 'store.urls'
@@ -154,7 +160,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.User'
 
 # celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
@@ -175,6 +181,13 @@ CACHES = {
     }
 }
 
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'ssavutokhunov@gmail.com'
+EMAIL_HOST_PASSWORD = 'gixrpwclyxngppuu'
+EMAIL_PORT = 587
+
 REST_FRAMEWORK = {
     # for swagger
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema', 
@@ -183,7 +196,6 @@ REST_FRAMEWORK = {
     # JWT
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     )
 }
 
@@ -215,6 +227,6 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=2),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=10),
 }

@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser 
+from utils.NumberValidator import phone_validator
 
 
 class User(AbstractUser):
@@ -12,7 +13,8 @@ class User(AbstractUser):
     phone_number = models.CharField(
         max_length=13,
         blank=True, 
-        null=True
+        null=True,
+        validators=[phone_validator]
     )
     birth_date = models.DateField( 
         blank=True, 
@@ -23,9 +25,8 @@ class User(AbstractUser):
         null=True, 
         blank=True
     )
-    money = models.FloatField(
-        default=0
-    )
+    sale = models.PositiveSmallIntegerField()
+    amount = models.PositiveSmallIntegerField()
     about = models.TextField()
     created = models.DateTimeField( 
         auto_now_add=True
@@ -39,18 +40,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return f'{self.username}'
-
-
-class Wallet(models.Model):
-    amount = models.IntegerField()
-    owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='wallet_owner'
-    )
-    date = models.DateTimeField(
-        auto_now_add=True
-    )
-
-    def __str__(self):
-        return f'{self.id} -- {self.amount}'

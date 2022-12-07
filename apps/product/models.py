@@ -15,11 +15,6 @@ class Product(models.Model):
         null=True,
         blank=True
     )
-    owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='product_owner'
-    )
     image = models.ImageField(
         upload_to='product_images/'
     )
