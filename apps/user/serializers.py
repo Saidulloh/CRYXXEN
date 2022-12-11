@@ -10,7 +10,8 @@ class UserSerializerCreate(serializers.ModelSerializer):
         model = User
         read_only_fields = (
             'id',
-            'money',
+            'sale',
+            'amount',
             'created',
             'is_online',
         )

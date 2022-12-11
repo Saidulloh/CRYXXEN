@@ -10,7 +10,7 @@ router.register(
     viewset=UserAPIViewSet
 )
 router.register(
-    prefix="user-edit",
+    prefix="current-user",
     viewset=UserUpdateDestroyAPIView
 )
 

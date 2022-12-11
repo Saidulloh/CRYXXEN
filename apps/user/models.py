@@ -25,8 +25,14 @@ class User(AbstractUser):
         null=True, 
         blank=True
     )
-    sale = models.PositiveSmallIntegerField()
-    amount = models.PositiveSmallIntegerField()
+    sale = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True
+    )
+    amount = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True
+    )
     about = models.TextField()
     created = models.DateTimeField( 
         auto_now_add=True
