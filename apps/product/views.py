@@ -39,7 +39,6 @@ class ProductApiViewSet(GenericViewSet,
         return serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        price = self.request.query_params.get('search')
         queryset = Product.objects.filter(is_active=True)
         return queryset
 
