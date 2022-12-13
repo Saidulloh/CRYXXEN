@@ -233,6 +233,5 @@ SIMPLE_JWT = {
 
 DEFAULTS = {
     # Filtering
-    'SEARCH_PARAM': 'search',
     'ORDERING_PARAM': 'ordering'
 }
