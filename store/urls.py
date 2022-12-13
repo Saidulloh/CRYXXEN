@@ -34,7 +34,7 @@ urlpatterns = [
     path('swagger/', schema_view),
     
     # Authorization
-    path("api/", include(api_urlpatterns))
+    path('', include(api_urlpatterns))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.user.models import User
+from apps.wallet.serializers import ReplenishmentWalletSerializer
+from apps.favorite.serializers import FavoriteSerializer
+from apps.basket.serializers import BasketSerializer
 
 
 class UserSerializerCreate(serializers.ModelSerializer):
@@ -19,9 +22,9 @@ class UserSerializerCreate(serializers.ModelSerializer):
             'username',
             'last_activity',
             'email',
+            'avatarka',
             'phone_number',
             'birth_date',
-            'avatarka',
             'about',
             'password'
         )
@@ -51,9 +54,9 @@ class UserSerializerList(serializers.ModelSerializer):
 
 
 class UserSerializerDetail(serializers.ModelSerializer):
-    wallet_owner = UserSerializerList(many=True, read_only=True)
-    user_favorite = UserSerializerList(many=True, read_only=True)
-    basket_owner = UserSerializerList(many=True, read_only=True)
+    wallet_owner = ReplenishmentWalletSerializer(many=True, read_only=True)
+    user_favorite = FavoriteSerializer(many=True, read_only=True)
+    basket_owner = BasketSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -72,7 +75,7 @@ class UserSerializerDetail(serializers.ModelSerializer):
             'is_online',
             'wallet_owner',
             'user_favorite',
-            'basket_owner'
+            'basket_owner',
         )
 
 

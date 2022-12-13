@@ -17,6 +17,6 @@ class ReplenishmentWalletAPIViewSet(GenericViewSet,
     def create(self, request, *args, **kwargs):
         user = User.objects.get(id = request.user.id)
         amount = int(request.data['amount'])
-        user.money += amount
+        user.sale += amount
         user.save()
         return super().create(request, *args, **kwargs)

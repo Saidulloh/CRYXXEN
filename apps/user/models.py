@@ -25,7 +25,7 @@ class User(AbstractUser):
         null=True, 
         blank=True
     )
-    sale = models.PositiveSmallIntegerField(
+    sale = models.IntegerField(
         null=True,
         blank=True
     )

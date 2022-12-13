@@ -41,14 +41,12 @@ class UserAPIViewSet(GenericViewSet,
                     ListModelMixin,
                     RetrieveModelMixin):
     queryset = User.objects.all()
-    serializer_class = UserSerializerList
 
     def retrieve(self, request, *args, **kwargs):
         try:
             instance = User.objects.get(id = kwargs.get('pk'))
             if instance == request.user:
-                serializer = UserSerializerDetail(instance)
-                return Response(serializer.data)
+                return Response(UserSerializerDetail(instance).data)
             return Response(UserSerializerList(instance=instance).data)
         except User.DoesNotExist:
             return Response({'Error': 'Can\'t find user'})
