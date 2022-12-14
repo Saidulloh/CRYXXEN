@@ -6,7 +6,7 @@ from apps.product.serializers import ProductSerializer
 
 class BasketSerializer(serializers.ModelSerializer):
     total = serializers.SerializerMethodField(read_only=True)
-    products = ProductSerializer(many=True, read_only=True)
+    prods = ProductSerializer(many=True, read_only=True)
 
     class Meta:
         model = Basket
@@ -15,10 +15,10 @@ class BasketSerializer(serializers.ModelSerializer):
         )
         fields = (
             'id',
-            'products',
             'time_create',
             'total',
-            'products'
+            'products',
+            'prods',
         )
 
     def get_total(self, obj):

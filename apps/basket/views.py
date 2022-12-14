@@ -2,6 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework import status
 
 from apps.basket.models import Basket
 from apps.basket.serializers import BasketSerializer
@@ -12,7 +13,7 @@ from apps.product.models import Product
 class BasketAPIViewSet(ModelViewSet):
     queryset = Basket.objects.all()
     serializer_class = BasketSerializer
-    permission_classes = [IsOwner or IsAuthenticated]
+    permission_classes = [IsOwner]
     filter_backends = [SearchFilter, OrderingFilter]
     filter_fields = [
         'time_create'

@@ -7,7 +7,7 @@ from apps.user.models import User
 class Basket(models.Model):
     products = models.ManyToManyField(
         Product,
-        related_name='products'
+        related_name='basket_products'
     )
     owner = models.ForeignKey(
         User,
