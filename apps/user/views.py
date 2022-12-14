@@ -24,7 +24,7 @@ class UserUpdateDestroyAPIView(GenericViewSet,
                 return Response(data=UserSerializerDetail(user).data)
             return Response({'Error':'You don\'t have pretty permissions!'})
         except User.DoesNotExist:
-            return Response({'Error':'Can\'t find user'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'Error':'Can\'t find user'}, status=HTTP_400_BAD_REQUEST)
 
     def get(self, request, *args, **kwargs):
         return self.check(request, *args, **kwargs)

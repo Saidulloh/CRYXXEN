@@ -12,7 +12,7 @@ class CategoryApiViewSet(GenericViewSet,
                         RetrieveModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    filter_backends = [SearchFilter, OrderingFilter, ]
+    filter_backends = [SearchFilter, OrderingFilter]
     filter_fields = [
             'title',
             ]

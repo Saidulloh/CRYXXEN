@@ -5,14 +5,21 @@ from apps.product.serializers import ProductSerializer
 
 
 class BasketSerializer(serializers.ModelSerializer):
+    total = serializers.SerializerMethodField(read_only=True)
+    products = ProductSerializer(many=True, read_only=True)
+
     class Meta:
         model = Basket
         read_only_fields = (
             'owner',
         )
         fields = (
-            'id', 
-            'product',
+            'id',
+            'products',
             'time_create',
-            'amount'
+            'total',
+            'products'
         )
+
+    def get_total(self, obj):
+        return sum([product.price for product in obj.products.all()])

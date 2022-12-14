@@ -13,8 +13,7 @@ class ProductApiViewSet(GenericViewSet,
                         RetrieveModelMixin):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
-    filter_backends = [OrderingFilter] # SearchFilter]
+    filter_backends = [OrderingFilter] 
     filter_fields = [
             'title',
             'category',

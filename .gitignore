@@ -1,5 +1,7 @@
 venv/
+env/
 media/
 db.sqlite3
 dump.rdb
 celerybeat-schedule
+/static/
