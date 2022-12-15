@@ -1,13 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework import status
 
 from apps.basket.models import Basket
-from apps.basket.serializers import BasketSerializer
+from apps.basket.serializers import BasketSerializer, BasketCreateSerializer
 from apps.basket.permissions import IsOwner
-from apps.product.models import Product
 
 
 class BasketAPIViewSet(ModelViewSet):
@@ -25,6 +21,11 @@ class BasketAPIViewSet(ModelViewSet):
         'products__title',
         'products__price'
     ]
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return BasketCreateSerializer
+        return BasketSerializer
 
     def get_queryset(self):
         return Basket.objects.filter(owner__id=self.request.user.id)
