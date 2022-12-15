@@ -8,6 +8,7 @@ from apps.user.models import User
 
 @receiver(post_save, sender=Product)
 def handle_signal_product_created(instance, created, **kwargs):
+    print(instance)
     if created:
         users = User.objects.all()
         product = Product.objects.get(title = instance)

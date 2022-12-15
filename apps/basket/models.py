@@ -5,9 +5,12 @@ from apps.user.models import User
 
 
 class Basket(models.Model):
+    tite = models.CharField(
+        max_length=255
+    )
     products = models.ManyToManyField(
         Product,
-        related_name='basket_products'
+        related_name='products'
     )
     owner = models.ForeignKey(
         User,
@@ -16,6 +19,9 @@ class Basket(models.Model):
     )
     time_create = models.DateTimeField(
         auto_now_add=True
+    )
+    is_active = models.BooleanField(
+        default=True
     )
 
     def __str__(self):

@@ -6,7 +6,7 @@ from apps.product.serializers import ProductSerializer
 
 class BasketSerializer(serializers.ModelSerializer):
     total = serializers.SerializerMethodField(read_only=True)
-    prods = ProductSerializer(many=True, read_only=True)
+    products_data = serializers.SerializerMethodField()
 
     class Meta:
         model = Basket
@@ -17,9 +17,14 @@ class BasketSerializer(serializers.ModelSerializer):
             'id',
             'time_create',
             'total',
-            'products',
-            'prods',
+            'products_data',
+            'is_active',
+            'products'
         )
 
-    def get_total(self, obj):
+    def get_total(self, obj):   
         return sum([product.price for product in obj.products.all()])
+
+    def get_products_data(self, obj):
+        produts = obj.products.all()
+        return ProductSerializer(produts, many=True).data
