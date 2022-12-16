@@ -6,13 +6,16 @@ from apps.product.serializers import ProductSerializer
 
 class ProductsDataMixin:
 
-    def get_total(self, obj):   
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def get_total(obj):
         return sum([product.price for product in obj.products.all()])
 
 
-class BasketSerializer(serializers.ModelSerializer, 
-                        ProductsDataMixin):
-
+class BasketSerializer(serializers.ModelSerializer,
+                       ProductsDataMixin):
     total = serializers.SerializerMethodField(read_only=True)
     products_data = serializers.SerializerMethodField()
 
@@ -23,26 +26,28 @@ class BasketSerializer(serializers.ModelSerializer,
         )
         fields = (
             'id',
+            'title',
             'time_create',
             'total',
             'products_data',
             'is_active',
         )
 
-    def get_products_data(self, obj):
-        produts = obj.products.all()
-        return ProductSerializer(produts, many=True).data
+    @staticmethod
+    def get_products_data(obj):
+        products = obj.products.all()
+        return ProductSerializer(products, many=True).data
 
 
-class BasketCreateSerializer(serializers.ModelSerializer, 
-                            ProductsDataMixin):
-
+class BasketCreateSerializer(serializers.ModelSerializer,
+                             ProductsDataMixin):
     total = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Basket
         fields = (
             'id',
+            'title',
             'time_create',
             'total',
             'products',
