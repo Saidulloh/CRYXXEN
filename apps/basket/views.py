@@ -17,6 +17,10 @@ class BasketAPIViewSet(ModelViewSet):
     ordering_fields = [
         'time_create'
     ]
+    search_fields = [
+        'products__title',
+        'products__price'
+    ]
 
     def get_serializer_class(self):
         if self.action == 'create':
