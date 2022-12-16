@@ -17,10 +17,6 @@ class BasketAPIViewSet(ModelViewSet):
     ordering_fields = [
         'time_create'
     ]
-    search_fields = [
-        'products__title',
-        'products__price'
-    ]
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -28,7 +24,18 @@ class BasketAPIViewSet(ModelViewSet):
         return BasketSerializer
 
     def get_queryset(self):
-        return Basket.objects.filter(owner__id=self.request.user.id)
+        title = self.request.query_params.get('products__title')
+        price = self.request.query_params.get('products__price')
+        user_id = self.request.user.id
+        if title and price:
+            queryset = Basket.objects.filter(owner__id=user_id, products__title__icontains=title, products__price=price)
+        elif price:
+            queryset = Basket.objects.filter(owner__id=user_id, products__price=price)
+        elif title:
+            queryset = Basket.objects.filter(owner__id=user_id, products__title__icontains=title)
+        else:
+            queryset = Basket.objects.filter(owner__id=user_id, is_active=True)
+        return set(queryset)
 
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
