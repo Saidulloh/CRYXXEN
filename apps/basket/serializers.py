@@ -26,7 +26,6 @@ class BasketSerializer(serializers.ModelSerializer,
         )
         fields = (
             'id',
-            'title',
             'time_create',
             'total',
             'products_data',
@@ -47,7 +46,6 @@ class BasketCreateSerializer(serializers.ModelSerializer,
         model = Basket
         fields = (
             'id',
-            'title',
             'time_create',
             'total',
             'products',

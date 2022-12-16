@@ -5,9 +5,6 @@ from apps.user.models import User
 
 
 class Basket(models.Model):
-    tite = models.CharField(
-        max_length=255
-    )
     products = models.ManyToManyField(
         Product,
         related_name='products'

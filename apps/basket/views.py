@@ -28,10 +28,7 @@ class BasketAPIViewSet(ModelViewSet):
         return BasketSerializer
 
     def get_queryset(self):
-        baskets = Basket.objects.filter(owner__id=self.request.user.id)
-        for i in baskets:
-            print(i.time_create)
-        return baskets
+        return Basket.objects.filter(owner__id=self.request.user.id)
 
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
