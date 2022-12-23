@@ -54,3 +54,4 @@ class BasketRetrieveUpdateDestroyApiViewSet(GenericViewSet,
                                         DestroyModelMixin):
     queryset = Basket.objects.all()
     serializer_class = BasketSerializer
+    permission_classes = [IsOwner]
