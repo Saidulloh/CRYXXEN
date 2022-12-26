@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.basket.models import Basket
-from apps.product.serializers import ProductSerializer, ProductBasketSerializer
+from apps.product.serializers import ProductBasketSerializer
 
 
 class ProductsDataMixin:
