@@ -2,10 +2,12 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from apps.basket.models import Basket 
 from apps.basket_detail.models import BasketDetail
 from apps.basket_detail.serializers import BasketDetailSerializer
+from apps.basket_detail.permissions import IsOwner
 
 
 class BasketDetailApiViewSet(GenericViewSet,
@@ -16,6 +18,7 @@ class BasketDetailApiViewSet(GenericViewSet,
                             DestroyModelMixin):
     queryset = BasketDetail.objects.all()
     serializer_class = BasketDetailSerializer
+    permission_classes = [IsOwner, IsAuthenticated]
 
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
