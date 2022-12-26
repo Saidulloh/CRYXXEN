@@ -22,4 +22,4 @@ class Basket(models.Model):
     )
 
     def __str__(self):
-        return f'{self.products} -- {self.owner.username}'
+        return f'{self.id} -- {self.owner.username}'

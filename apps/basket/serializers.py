@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.basket.models import Basket
-from apps.product.serializers import ProductSerializer
+from apps.product.serializers import ProductSerializer, ProductBasketSerializer
 
 
 class ProductsDataMixin:
@@ -35,7 +35,7 @@ class BasketSerializer(serializers.ModelSerializer,
     @staticmethod
     def get_products_data(obj):
         products = obj.products.all()
-        return ProductSerializer(products, many=True).data
+        return ProductBasketSerializer(products, many=True).data
 
 
 class BasketCreateSerializer(serializers.ModelSerializer,

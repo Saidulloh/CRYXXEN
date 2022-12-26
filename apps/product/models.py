@@ -29,6 +29,7 @@ class Product(models.Model):
         decimal_places=2
     )
     is_active = models.BooleanField(default=False)
+    amount = models.IntegerField(default=0, verbose_name='amount')
 
     def __str__(self):
         return f'{self.title}'

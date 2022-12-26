@@ -14,6 +14,7 @@ schema_view = get_swagger_view(title='CRYXXEN API')
 
 api_urlpatterns = [
     path('baskets/', include('apps.basket.urls')),
+    path('basket_detail/', include('apps.basket_detail.urls')),
     path('categories/', include('apps.category.urls')),
     path('favorites/', include('apps.favorite.urls')),
     path('products/', include('apps.product.urls')),

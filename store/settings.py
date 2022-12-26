@@ -49,6 +49,7 @@ LOCAL_APPS = [
     'apps.product',
     'apps.user',
     'apps.wallet',
+    'apps.basket_detail',
 ]
 
 REQUIREMENTS = [

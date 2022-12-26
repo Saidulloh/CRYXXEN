@@ -6,7 +6,7 @@ from apps.product.models import Product
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        read_only_field = 'owner'
+        read_only_fields = ('owner', 'amount')
         fields = (
             'id',
             'title',
@@ -16,4 +16,21 @@ class ProductSerializer(serializers.ModelSerializer):
             'time_update',
             'price',
             'is_active'
+        )
+
+
+class ProductBasketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        read_only_fields = ('owner',)
+        fields = (
+            'id',
+            'title',
+            'category',
+            'image',
+            'time_create',
+            'time_update',
+            'price',
+            'is_active',
+            'amount'
         )
