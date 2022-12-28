@@ -11,7 +11,13 @@ class ProductsDataMixin:
 
     @staticmethod
     def get_total(obj):
-        return sum([product.price * product.amount for product in obj.products.all()])
+        lst = []
+        for product in obj.products.all():
+            if product.amount == 0:
+                product.amount = 1
+                product.save()
+            lst.append(product.price * product.amount)
+        return sum(lst)
 
 
 class BasketSerializer(serializers.ModelSerializer,

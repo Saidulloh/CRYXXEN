@@ -33,9 +33,9 @@ class BasketDetailApiViewSet(GenericViewSet,
         else:
             for product in basket.products.all():
                 if product_id == str(product.id):
-                    product.amount += int(amount)
+                    product.amount = int(amount)
                     product.save()
-                    return Response({'Success': 'Amount of product is successfully added!'})
+                    return Response({'Success': 'Amount of product is successfully rewrited!'})
                 else:
                     continue
         serializer = BasketDetailSerializer(data=request.data)

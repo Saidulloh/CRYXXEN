@@ -22,7 +22,6 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductBasketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        read_only_fields = ('owner',)
         fields = (
             'id',
             'title',
@@ -32,5 +31,5 @@ class ProductBasketSerializer(serializers.ModelSerializer):
             'time_update',
             'price',
             'is_active',
-            'amount'
+            'amount',
         )

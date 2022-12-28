@@ -12,16 +12,17 @@ class BasketDetail(models.Model):
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='basket detail owner+',
+        related_name='basket_detail_owner',
         verbose_name='owner',
     )
     amount = models.IntegerField(
-        verbose_name='amount'
+        verbose_name='amount',
+        default=1
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.DO_NOTHING,
-        related_name='product',
+        related_name='basket_detail_product',
         verbose_name='product'
     )
 
